@@ -19,8 +19,9 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       className={`${interSans.variable} h-full antialiased`}
     >
       <body className="min-h-dvh flex flex-col items-center">
-        <div className="flex-1 w-full max-w-xl flex flex-col"></div>
-        <main className="flex-1 w-full">{children}</main>
+        <div className="flex-1 w-full max-w-xl flex flex-col border border-blue-500">
+          <main className="border border-red-500">{children}</main>
+        </div>
       </body>
     </html>
   );
