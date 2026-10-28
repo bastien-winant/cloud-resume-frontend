@@ -19,6 +19,10 @@ jobs:
         with:
           role-to-assume: arn:aws:iam::779518747346:role/GithubOIDC
           aws-region: ${{ vars.AWS_REGION }}
+      - name: Install modules
+        run: npm ci
+      - name: Build application
+        run: npm run build
       - name: Deploy to S3
         run: aws s3 sync --delete ./dist/ s3://${{ vars.BUCKET_NAME }}
       - name: Create CloudFront invalidation

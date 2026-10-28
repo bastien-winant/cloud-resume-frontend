@@ -1,0 +1,26 @@
+---
+import { Font } from "astro:assets";
+import "@/styles/global.css";
+import Header from "@/components/Header.astro";
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<link rel="icon" href="/favicon.ico" />
+		<meta name="generator" content={Astro.generator} />
+		<title>Bastien Winant | Cloud Resume</title>
+		<Font cssVariable="--font-inter" />
+	</head>
+	<body class="min-h-dvh pt-17.5 px-5.5 py-6 md:py-20.5 flex flex-col items-center bg-grey-5 font-sans">
+		<div class="w-full max-w-xl flex flex-col gap-13.75 border border-red-500">
+			<Header />
+			<main>
+				<slot />
+			</main>
+		</div>
+	</body>
+</html>

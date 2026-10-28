@@ -1,0 +1,26 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import Section from '@/components/Section.astro';
+import Link from '@/components/Link.astro';
+---
+
+<Layout>
+	<div class="flex flex-col gap-14.5">
+		<Section title="about">
+			<p class="body text-grey-2">
+				I’m a passionate UX designer striving to create intuitive and engaging experiences.
+				I’m a big believer that things can always be simpler than we think.
+			</p>
+		</Section>
+		<Section title="contact" as="footer">
+			<ul class="flex flex-col items-start">
+				<li>
+					<Link label="bastienwinant" href="https://www.linkedin.com/in/bastienwinant" />
+				</li>
+				<li>
+					<Link label="bastien-winant" href="https://www.github.com/bastien-winant" />
+				</li>
+			</ul>
+		</Section>
+	</div>
+</Layout>

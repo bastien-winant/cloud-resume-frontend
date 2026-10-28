@@ -1,0 +1,7 @@
+---
+const { label, href } = Astro.props;
+---
+
+<a href={href} class="underline-offset-6 hover:underline text-grey-1" target="_blank">
+  <span class="body">{label}</span>
+</a>
