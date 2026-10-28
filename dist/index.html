@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pluralsight Learner Quotes</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@300;400;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --ps-black: #181818;
+            --ps-dark-grey: #222222;
+            --ps-card-grey: #363636;
+            --ps-pink: #ec008c;
+            --ps-orange: #f05a28;
+            --text-white: #ffffff;
+            --text-grey: #aaaaaa;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Source Sans Pro', sans-serif;
+            background-color: var(--ps-dark-grey);
+            color: var(--text-white);
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* --- Sidebar Navigation --- */
+        .sidebar {
+            width: 260px;
+            background-color: var(--ps-black);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            border-right: 1px solid #333;
+            position: fixed;
+            height: 100%;
+            top: 0;
+            left: 0;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 40px;
+            background: linear-gradient(to right, var(--ps-pink), var(--ps-orange));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: 1px;
+        }
+
+        .nav-links {
+            list-style: none;
+        }
+
+        .nav-links li {
+            margin-bottom: 20px;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-grey);
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            transition: 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--text-white);
+            transform: translateX(5px);
+        }
+
+        .nav-links i {
+            width: 30px;
+            font-size: 18px;
+            background: linear-gradient(to bottom right, var(--ps-pink), var(--ps-orange));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* --- Main Content --- */
+        .main-content {
+            margin-left: 260px;
+            padding: 40px;
+            width: 100%;
+        }
+
+        h1 {
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: var(--text-grey);
+            margin-bottom: 40px;
+        }
+
+        /* --- Input Section --- */
+        .input-section {
+            background-color: var(--ps-card-grey);
+            padding: 20px;
+            border-radius: 8px;
+            display: flex;
+            gap: 15px;
+            margin-bottom: 40px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+        }
+
+        input[type="text"] {
+            flex-grow: 1;
+            padding: 12px;
+            border-radius: 4px;
+            border: 1px solid #555;
+            background-color: var(--ps-dark-grey);
+            color: white;
+            font-size: 16px;
+        }
+
+        input[type="text"]:focus {
+            outline: none;
+            border-color: var(--ps-pink);
+        }
+
+        button {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 4px;
+            background: linear-gradient(to right, var(--ps-pink), var(--ps-orange));
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: opacity 0.3s;
+        }
+
+        button:hover {
+            opacity: 0.9;
+        }
+
+        /* --- Quote Grid --- */
+        .quote-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .quote-card {
+            background-color: var(--ps-card-grey);
+            padding: 25px;
+            border-radius: 8px;
+            border-left: 4px solid var(--ps-pink);
+            transition: transform 0.2s;
+        }
+
+        .quote-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 15px rgba(0,0,0,0.3);
+        }
+
+        .quote-text {
+            font-size: 18px;
+            font-style: italic;
+            line-height: 1.5;
+            margin-bottom: 15px;
+        }
+
+        .quote-tag {
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--ps-orange);
+            font-weight: 700;
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 70px;
+                padding: 15px 10px;
+            }
+            .nav-text, .logo { display: none; }
+            .sidebar .logo-icon { display: block; margin-bottom: 30px; text-align: center; color: white; font-weight: bold;}
+            .main-content { margin-left: 70px; padding: 20px; }
+            .input-section { flex-direction: column; }
+        }
+    </style>
+</head>
+<body>
+
+    <aside class="sidebar">
+        <div class="logo">PLURALSIGHT LABS</div>
+        <div class="logo-icon" style="display:none;">PS</div>
+        
+        <ul class="nav-links">
+            <li>
+                <a href="https://www.pluralsight.com" target="_blank">
+                    <i class="fa-solid fa-globe"></i>
+                    <span class="nav-text">Pluralsight.com</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://www.pluralsight.com/subscribe/newsletter" target="_blank">
+                    <i class="fa-solid fa-envelope-open-text"></i>
+                    <span class="nav-text">Newsletters</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://www.youtube.com/user/pluralsight" target="_blank">
+                    <i class="fa-brands fa-youtube"></i>
+                    <span class="nav-text">YouTube</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://www.tiktok.com/@pluralsight" target="_blank">
+                    <i class="fa-brands fa-tiktok"></i>
+                    <span class="nav-text">TikTok</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://app.pluralsight.com/profile/author/chris-jackson" target="_blank">
+                    <i class="fa-solid fa-user-tie"></i>
+                    <span class="nav-text">About Author</span>
+                </a>
+            </li>
+        </ul>
+    </aside>
+
+    <main class="main-content">
+        <h1>Guru Inspiration Board</h1>
+        <p class="subtitle">Daily motivation for your Cloud, AI, and Security journey.</p>
+
+        <div class="input-section">
+            <input type="text" id="newQuoteInput" placeholder="Enter a new quote for the community...">
+            <button onclick="addQuote()">Add Quote</button>
+        </div>
+
+        <div class="quote-grid" id="quotesContainer">
+            </div>
+    </main>
+
+    <script>
+        // Initial Data - 10 Pre-existing Quotes
+        const quotes = [
+            { text: "Security is not a product, but a process.", tag: "Cybersecurity" },
+            { text: "The cloud is just someone else's computer, but with better uptime.", tag: "Cloud Computing" },
+            { text: "AI won't replace you. A person using AI will.", tag: "Artificial Intelligence" },
+            { text: "In AWS, there is no compression algorithm for experience.", tag: "AWS" },
+            { text: "Identity is the new perimeter.", tag: "Security" },
+            { text: "The cloud is about how you do computing, not where you do computing.", tag: "Azure" },
+            { text: "Data is the new oil, but AI is the refinery.", tag: "AI / Data" },
+            { text: "If you think technology can solve your security problems, then you don't understand the problems and you don't understand the technology.", tag: "Cybersecurity" },
+            { text: "Treat your servers like cattle, not pets.", tag: "DevOps" },
+            { text: "Failure is not the opposite of success; it’s part of success. Keep building.", tag: "General" }
+        ];
+
+        const container = document.getElementById('quotesContainer');
+        const input = document.getElementById('newQuoteInput');
+
+        // Function to render quotes to the DOM
+        function renderQuotes() {
+            container.innerHTML = ""; // Clear current list
+            quotes.forEach(quote => {
+                const card = document.createElement('div');
+                card.className = 'quote-card';
+                card.innerHTML = `
+                    <div class="quote-text">"${quote.text}"</div>
+                    <div class="quote-tag">${quote.tag}</div>
+                `;
+                container.prepend(card); // Add new ones to the top
+            });
+        }
+
+        // Function to add a new quote
+        function addQuote() {
+            const text = input.value.trim();
+            if (text) {
+                // Add to array
+                quotes.push({ text: text, tag: "Learner Contribution" });
+                // Clear input
+                input.value = "";
+                // Re-render
+                renderQuotes();
+            } else {
+                alert("Please enter a quote before posting!");
+            }
+        }
+
+        // Initial Render
+        renderQuotes();
+    </script>
+</body>
+</html>
