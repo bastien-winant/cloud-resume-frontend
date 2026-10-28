@@ -1,0 +1,23 @@
+name: Deploy Website
+
+on:
+  push
+
+env:
+  BUCKET_NAME : "cloud-resume-frontend-779518747346-eu-central-1-an"
+  AWS_REGION : "eu-central-1"
+
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v6.3.0
+        with:
+          role-to-assume: arn:aws:iam::779518747346:role/GithubOIDC
+          aws-region: eu-central-1
+      - name: Deploy to S3
+        run: aws s3 sync --delete ./dist/ s3://${{ env.BUCKET_NAME }}
