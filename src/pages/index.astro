@@ -1,6 +1,8 @@
 ---
 import Layout from '@/layouts/Layout.astro';
 import Section from '@/components/Section.astro';
+import RowGroup from '@/components/RowGroup.astro';
+import RowItem from '@/components/RowItem.astro';
 import Link from '@/components/Link.astro';
 ---
 
@@ -13,14 +15,17 @@ import Link from '@/components/Link.astro';
 			</p>
 		</Section>
 		<Section title="contact" as="footer">
-			<ul class="flex flex-col items-start">
-				<li>
+			<RowGroup>
+				<RowItem>
+					<Link label="bastien.winant@gmail.com" href="mailto:bastien.winant@gmail.com" />
+				</RowItem>
+				<RowItem>
 					<Link label="bastienwinant" href="https://www.linkedin.com/in/bastienwinant" />
-				</li>
-				<li>
+				</RowItem>
+				<RowItem>
 					<Link label="bastien-winant" href="https://www.github.com/bastien-winant" />
-				</li>
-			</ul>
+				</RowItem>
+			</RowGroup>
 		</Section>
 	</div>
 </Layout>
