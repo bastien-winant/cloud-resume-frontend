@@ -166,9 +166,9 @@ data "aws_iam_policy_document" "logs_bucket_policy" {
     }
 
     condition {
-      test = "StringEquals"
+      test     = "StringEquals"
       variable = "S3:x-amz-acl"
-      values = ["bucket-owner-full-control"]
+      values   = ["bucket-owner-full-control"]
     }
 
     condition {
@@ -221,7 +221,7 @@ resource "aws_cloudwatch_log_delivery_destination" "distribution_logs_destinatio
 resource "aws_cloudwatch_log_delivery" "distribution_log" {
   region = "us-east-1"
 
-  delivery_source_name = aws_cloudwatch_log_delivery_source.distribution_logs_source.name
+  delivery_source_name     = aws_cloudwatch_log_delivery_source.distribution_logs_source.name
   delivery_destination_arn = aws_cloudwatch_log_delivery_destination.distribution_logs_destination.arn
 
   record_fields = [
@@ -247,6 +247,6 @@ resource "aws_cloudwatch_log_delivery" "distribution_log" {
 
   s3_delivery_configuration {
     enable_hive_compatible_path = true
-    suffix_path = "/{yyyy}/{MM}/{dd}/"
+    suffix_path                 = "/{yyyy}/{MM}/{dd}/"
   }
 }
