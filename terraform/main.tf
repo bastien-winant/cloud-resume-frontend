@@ -62,7 +62,7 @@ data "aws_iam_policy_document" "origin_bucket_policy" {
     condition {
       test     = "StringEquals"
       variable = "AWS:SourceArn"
-      values   = [aws_cloudfront_distribution.s3_distribution.arn]
+      values   = [aws_cloudfront_distribution.distribution.arn]
     }
   }
 }
@@ -187,6 +187,8 @@ resource "aws_s3_bucket_policy" "logs_bucket_policy_attachment" {
 
 # CLOUDFRONT LOGGING DELIVERY SOURCE
 resource "aws_cloudwatch_log_delivery_source" "distribution_logs_source" {
+  region = "us-east-1"
+
   name         = "${var.name_prefix}-cloudfront-log-source"
   log_type     = "ACCESS_LOGS"
   resource_arn = aws_cloudfront_distribution.distribution.arn
@@ -200,6 +202,8 @@ resource "aws_cloudwatch_log_delivery_source" "distribution_logs_source" {
 
 # CLOUDFRONT LOGGING DELIVERY DESTINATION
 resource "aws_cloudwatch_log_delivery_destination" "distribution_logs_destination" {
+  region = "us-east-1"
+
   name          = "${var.name_prefix}-cloudfront-logs-destination"
   output_format = "parquet"
 
@@ -215,6 +219,8 @@ resource "aws_cloudwatch_log_delivery_destination" "distribution_logs_destinatio
 
 
 resource "aws_cloudwatch_log_delivery" "distribution_log" {
+  region = "us-east-1"
+
   delivery_source_name = aws_cloudwatch_log_delivery_source.distribution_logs_source.name
   delivery_destination_arn = aws_cloudwatch_log_delivery_destination.distribution_logs_destination.arn
 
@@ -228,7 +234,7 @@ resource "aws_cloudwatch_log_delivery" "distribution_log" {
     "cs(Host)",
     "cs(Referer)",
     "cs(User-Agent)",
-    "cs-status",
+    "sc-status",
     "x-edge-result-type",
     "x-edge-request-id",
     "cs-bytes",
@@ -238,8 +244,6 @@ resource "aws_cloudwatch_log_delivery" "distribution_log" {
     "c-country",
     "distributionid"
   ]
-
-  field_delimiter = "\t"
 
   s3_delivery_configuration {
     enable_hive_compatible_path = true
