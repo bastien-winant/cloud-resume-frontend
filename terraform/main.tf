@@ -13,6 +13,7 @@ locals {
 data "aws_caller_identity" "current" {}
 data "aws_region" "current" {}
 
+# CLOUDFRONT S3 ORIGIN BUCKET WITH ACCESS BLOCK AND VERSIONING ENABLED
 resource "aws_s3_bucket" "origin_bucket" {
   bucket           = format("${var.name_prefix}-origin-%s-%s-an", data.aws_caller_identity.current.account_id, data.aws_region.current.region)
   bucket_namespace = "account-regional"
@@ -33,6 +34,15 @@ resource "aws_s3_bucket_public_access_block" "origin_bucket_access_block" {
   restrict_public_buckets = true
 }
 
+resource "aws_s3_bucket_versioning" "versioning_example" {
+  bucket = aws_s3_bucket.origin_bucket.id
+  versioning_configuration {
+    status = "Enabled"
+  }
+}
+
+
+# CLOUDFRONT DISTRIBUTION PERMISSION TO READ OBJECTS IN ORIGIN BUCKET
 data "aws_iam_policy_document" "origin_bucket_policy" {
   statement {
     sid    = "AllowCloudFrontServicePrincipal"
@@ -62,6 +72,8 @@ resource "aws_s3_bucket_policy" "origin_bucket_policy_attachment" {
   policy = data.aws_iam_policy_document.origin_bucket_policy.json
 }
 
+
+# CLOUDFRONT ACCESS CONTROL AND DISTRIBUTION
 resource "aws_cloudfront_origin_access_control" "cloudfront_oac" {
   name                              = "${var.name_prefix}-oac"
   origin_access_control_origin_type = "s3"
