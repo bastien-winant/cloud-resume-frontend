@@ -1,4 +1,108 @@
 provider "aws" {
-  region  = "eu-central-1"
+  region  = var.region
   profile = "dev"
+}
+
+locals {
+  # Naming convention
+  resource_name = "${var.name_prefix}-${var.environment}"
+
+  s3_origin_id = "distribution-s3-origin"
+}
+
+data "aws_caller_identity" "current" {}
+data "aws_region" "current" {}
+
+resource "aws_s3_bucket" "origin_bucket" {
+  bucket           = format("${var.name_prefix}-origin-%s-%s-an", data.aws_caller_identity.current.account_id, data.aws_region.current.region)
+  bucket_namespace = "account-regional"
+  force_destroy    = true
+
+  tags = {
+    Name        = local.resource_name
+    Environment = var.environment
+  }
+}
+
+resource "aws_s3_bucket_public_access_block" "origin_bucket_access_block" {
+  bucket = aws_s3_bucket.origin_bucket.id
+
+  block_public_acls       = true
+  block_public_policy     = true
+  ignore_public_acls      = true
+  restrict_public_buckets = true
+}
+
+data "aws_iam_policy_document" "origin_bucket_policy" {
+  statement {
+    sid    = "AllowCloudFrontServicePrincipal"
+    effect = "Allow"
+
+    principals {
+      type        = "Service"
+      identifiers = ["cloudfront.amazonaws.com"]
+    }
+
+    actions = ["s3:GetObject"]
+
+    resources = [
+      "${aws_s3_bucket.origin_bucket.arn}/*",
+    ]
+
+    condition {
+      test     = "StringEquals"
+      variable = "AWS:SourceArn"
+      values   = [aws_cloudfront_distribution.s3_distribution.arn]
+    }
+  }
+}
+
+resource "aws_s3_bucket_policy" "origin_bucket_policy_attachment" {
+  bucket = aws_s3_bucket.origin_bucket.id
+  policy = data.aws_iam_policy_document.origin_bucket_policy.json
+}
+
+resource "aws_cloudfront_origin_access_control" "cloudfront_oac" {
+  name                              = "${var.name_prefix}-oac"
+  origin_access_control_origin_type = "s3"
+  signing_behavior                  = "always"
+  signing_protocol                  = "sigv4"
+}
+
+resource "aws_cloudfront_distribution" "s3_distribution" {
+  origin {
+    domain_name              = aws_s3_bucket.origin_bucket.bucket_regional_domain_name
+    origin_access_control_id = aws_cloudfront_origin_access_control.cloudfront_oac.id
+    origin_id                = local.s3_origin_id
+  }
+
+  enabled             = true
+  is_ipv6_enabled     = true
+  default_root_object = "index.html"
+
+  # AWS Managed Caching Policy (CachingOptimized)
+  default_cache_behavior {
+    cache_policy_id        = "658327ea-f89d-4fab-a63d-7e88639e58f6"
+    allowed_methods        = ["GET", "HEAD"]
+    cached_methods         = ["GET", "HEAD"]
+    compress               = true
+    target_origin_id       = local.s3_origin_id
+    viewer_protocol_policy = "redirect-to-https"
+  }
+
+  viewer_certificate {
+    cloudfront_default_certificate = true
+  }
+
+  restrictions {
+    geo_restriction {
+      restriction_type = "none"
+      locations        = []
+    }
+  }
+
+  tags = {
+    Name        = local.resource_name
+    Environment = var.environment
+  }
 }
