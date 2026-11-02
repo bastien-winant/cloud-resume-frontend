@@ -60,8 +60,8 @@ data "aws_iam_policy_document" "origin_bucket_policy" {
     ]
 
     condition {
-      test     = "StringEquals"
-      variable = "AWS:SourceArn"
+      test     = "ArnEquals"
+      variable = "aws:SourceArn"
       values   = [aws_cloudfront_distribution.distribution.arn]
     }
   }
@@ -161,19 +161,19 @@ data "aws_iam_policy_document" "logs_bucket_policy" {
 
     condition {
       test     = "StringEquals"
-      variable = "AWS:SourceAccount"
+      variable = "aws:SourceAccount"
       values   = [data.aws_caller_identity.current.account_id]
     }
 
     condition {
       test     = "StringEquals"
-      variable = "S3:x-amz-acl"
+      variable = "s3:x-amz-acl"
       values   = ["bucket-owner-full-control"]
     }
 
     condition {
       test     = "ArnLike"
-      variable = "AWS:SourceArn"
+      variable = "aws:SourceArn"
       values   = [aws_cloudwatch_log_delivery_source.distribution_logs_source.arn]
     }
   }
