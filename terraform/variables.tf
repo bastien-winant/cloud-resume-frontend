@@ -1,12 +1,12 @@
 variable "region" {
   type        = string
-  description = "Default project region"
+  description = "Default project region."
   default     = "eu-central-1"
 }
 
 variable "environment" {
   type        = string
-  description = "Deployment environment name"
+  description = "Deployment environment name."
   default     = "dev"
 
   validation {
@@ -15,8 +15,8 @@ variable "environment" {
   }
 }
 
-variable "name_prefix" {
+variable "project_name" {
   type        = string
-  description = "Shared prefix for resource names"
+  description = "Shared name for all resource associated with the Cloud resume project."
   default     = "cloud-resume"
 }
