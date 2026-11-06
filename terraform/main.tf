@@ -111,14 +111,14 @@ resource "aws_cloudfront_distribution" "distribution" {
     error_caching_min_ttl = 10
     error_code            = 403
     response_code         = 404
-    response_page_path    = "/error.html"
+    response_page_path    = "/error/index.html"
   }
 
   custom_error_response {
     error_caching_min_ttl = 10
     error_code            = 404
     response_code         = 404
-    response_page_path    = "/error.html"
+    response_page_path    = "/error/index.html"
   }
 
   # AWS Managed Caching Policy (CachingOptimized)
