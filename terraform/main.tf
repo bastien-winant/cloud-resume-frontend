@@ -1,24 +1,20 @@
 provider "aws" {
   region  = var.region
-  profile = "dev"
-}
-
-locals {
-  s3_origin_id = "${var.project_name}-distribution-s3-origin"
+  profile = var.environment
 }
 
 data "aws_caller_identity" "current" {}
 data "aws_region" "current" {}
 
+locals {
+  s3_origin_id = "${var.project_name}-distribution-s3-origin"
+  account_id   = data.aws_caller_identity.current.account_id
+}
+
 # CLOUDFRONT S3 ORIGIN BUCKET WITH ACCESS BLOCK AND VERSIONING ENABLED
 # creates the bucket in which to store the distribution origin files
 resource "aws_s3_bucket" "origin_bucket" {
-  bucket = format(
-    "%s-origin-%s-%s-an",
-    var.project_name,
-    data.aws_caller_identity.current.account_id,
-    var.region
-  )
+  bucket           = "${var.project_name}-origin-${local.account_id}-${var.region}-an"
   bucket_namespace = "account-regional"
   force_destroy    = true
 
@@ -152,18 +148,14 @@ resource "aws_cloudfront_distribution" "distribution" {
 # LOGS DELIVERY DESTINTION S3 BUCKET WITH ACCESS BLOCK
 # creates the s3 bucket in which to store distrbution access logs
 resource "aws_s3_bucket" "logs_bucket" {
-  bucket = format(
-    "%s-cloudfront-logs-%s-%s-an",
-    var.project_name,
-    data.aws_caller_identity.current.account_id,
-    data.aws_region.current.region
-  )
+  bucket           = "${var.project_name}-cloudfront-logs-${local.account_id}-${var.region}-an"
   bucket_namespace = "account-regional"
   force_destroy    = true
 
   tags = {
-    Project     = var.project_name
-    Environment = var.environment
+    Project      = var.project_name
+    Environment  = var.environment
+    Distribution = aws_cloudfront_distribution.distribution.arn
   }
 }
 
@@ -229,8 +221,9 @@ resource "aws_cloudwatch_log_delivery_source" "distribution_logs_source" {
   resource_arn = aws_cloudfront_distribution.distribution.arn
 
   tags = {
-    Project     = var.project_name
-    Environment = var.environment
+    Project      = var.project_name
+    Environment  = var.environment
+    Distribution = aws_cloudfront_distribution.distribution.arn
   }
 }
 
@@ -247,8 +240,9 @@ resource "aws_cloudwatch_log_delivery_destination" "distribution_logs_destinatio
   }
 
   tags = {
-    Project     = var.project_name
-    Environment = var.environment
+    Project      = var.project_name
+    Environment  = var.environment
+    Distribution = aws_cloudfront_distribution.distribution.arn
   }
 }
 
@@ -286,7 +280,8 @@ resource "aws_cloudwatch_log_delivery" "distribution_log" {
   }
 
   tags = {
-    Project     = var.project_name
-    Environment = var.environment
+    Project      = var.project_name
+    Environment  = var.environment
+    Distribution = aws_cloudfront_distribution.distribution.arn
   }
 }
